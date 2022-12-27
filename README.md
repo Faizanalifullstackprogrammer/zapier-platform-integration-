@@ -1,36 +1,21 @@
-# Zapier Platform
+# Core for Zapier CLI Platform [![Travis](https://img.shields.io/travis/zapier/zapier-platform-core.svg)](https://travis-ci.org/zapier/zapier-platform-core)
 
-[![CI](https://github.com/zapier/zapier-platform/actions/workflows/ci.yaml/badge.svg)](https://github.com/zapier/zapier-platform/actions/workflows/ci.yaml)
+This is the code that powers our [Zapier Platform CLI](https://zapier.github.io/zapier-platform-cli). You'll want to head to that repo to see how it's used.
 
-This is the main monorepo for all public code that powers the Zapier Platform Experience.
+## Development
 
-## Contents
+* `npm install` for getting started
+* `npm test` for running unit tests
+* `npm run local-integration-test` for running integration tests locally
+* `npm run build-boilerplate -- --debug` for building a `build-boilerplate/*.zip` (if you want to test buildless locally)
 
-It consists of a few main packages:
+### Integration Test on AWS Lambda
 
-- `zapier-platform-cli`: The CLI that devs can use to perform common tasks with their apps (such as `push`, `promote`, etc)
-- `zapier-platform-core`: The package which all apps depend on; it provides functionality at runtime.
-- `zapier-platform-schema`: The source of truth for what's allowed in the structure a Zapier app; not typically installed directly
-- `zapier-platform-legacy-scripting-runner`: If your app started as a Legacy Web Builder app, this provides a shim that keeps your app running seamlessly
-- `example-apps/*`: A varied set of example apps to get you started
+Make sure your AWS access key have permission to update and run Lambda functions, and then you can use these commands to run tests on AWS Lambda:
 
-## Getting Started
+* `npm run deploy-integration-test` builds and deploys a zip to a function named `integration-test-cli` on Lambda
+* `npm run lambda-integration-test` runs the integration test using the live Lambda function `integration-test-cli`
 
-```bash
-# Install Yarn if you haven't
-brew install yarn
+## Publishing (after merging)
 
-# Clone this repo
-git clone git@github.com:zapier/zapier-platform.git
-cd zapier-platform
-
-# Install dependencies
-yarn
-
-# Run tests for all packages
-yarn test
-
-# Run tests for an individual package
-cd packages/cli
-yarn test
-```
+* `npm version [patch|minor|major]` will pull, test, update schema version in dependencies for this package, update docs, increment version in package.json, and push tags, which then will tell Travis to publish to npm
